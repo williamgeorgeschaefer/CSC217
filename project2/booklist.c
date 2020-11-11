@@ -11,5 +11,5 @@ struct book{
     struct book *trailer = 0;
 
     void add(struct book newBook){
-        
+        newBook.isbn = isbn;
     }
