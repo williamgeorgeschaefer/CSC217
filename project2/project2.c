@@ -13,6 +13,7 @@ int main() {
     char title[200];
     char last[200];
     char first[200];
+    struct book myBook;
 
     int i = findLine(line, 1000);
     while(line[0] != '\0'){
