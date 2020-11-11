@@ -66,10 +66,13 @@ int main() {
         }
         first[firstIndex] = '\0';
         //printf("%s\n", first);
+        myBook.numCopies = 1;
         strcpy(myBook.isbn, isbn);
         strcpy(myBook.title, title);
         strcpy(myBook.last, last);
         strcpy(myBook.first, first);
+
+        printf("%d\n", myBook.numCopies);
 
         i = findLine(line, 1000);
     }
