@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "booklist.h"
 
 int findLine(char s[], int lim);
 
@@ -12,14 +13,7 @@ int main() {
     char title[200];
     char last[200];
     char first[200];
-    struct book{
-        int numCopies;
-        char isbn[11];
-        char title[200];
-        char last[200];
-        char first[200];
-        struct book *next;
-    };
+
     int i = findLine(line, 1000);
     while(line[0] != '\0'){
         int index = 0;
