@@ -1,0 +1,8 @@
+#! /bin/sh
+for i in **/; do
+cd $i
+echo $i
+make && ./project2 < ../books.txt > output.txt 
+diff ../output.txt ./output.txt > diff.txt
+cd ..
+done
