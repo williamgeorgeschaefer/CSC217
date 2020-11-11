@@ -6,3 +6,5 @@ struct book{
         char first[200];
         struct book *next;
     };
+
+void add(struct book *newBook);
