@@ -65,7 +65,12 @@ int main() {
             index++;
         }
         first[firstIndex] = '\0';
-        printf("%s\n", first);
+        //printf("%s\n", first);
+        strcpy(myBook.isbn, isbn);
+        strcpy(myBook.title, title);
+        strcpy(myBook.last, last);
+        strcpy(myBook.first, first);
+
         i = findLine(line, 1000);
     }
     return 0;
