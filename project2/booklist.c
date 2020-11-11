@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
 struct book{
         int numCopies;
         char isbn[11];
@@ -14,11 +19,11 @@ struct book{
         struct book *node = (struct book*)malloc(sizeof(struct book));
 
         node->numCopies = 1;
-        node->isbn = newBook->isbn;
-        node->title = newBook->title;
-        node->last = newBook->last;
-        node->first = newBook->first;
+        strcpy(node->isbn, newBook->isbn);
+        strcpy(node->title, newBook->title);
+        strcpy(node->last, newBook->last);
+        strcpy(node->first, newBook->first);
 
-        node.next = newBook;
+        node->next = newBook;
         header = node;
     }
