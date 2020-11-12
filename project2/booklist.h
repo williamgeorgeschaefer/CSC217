@@ -8,3 +8,4 @@ struct book{
     };
 
 void add(struct book *newBook);
+void printList();

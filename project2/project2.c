@@ -72,11 +72,12 @@ int main() {
         strcpy(myBook.last, last);
         strcpy(myBook.first, first);
 
+        add(&myBook);
         numLines++;
 
         i = findLine(line, 1000);
     }
-    printf("%d\n", numLines);
+    printList();
     return 0;
 }
 

@@ -16,6 +16,17 @@
         strcpy(node->last, newBook->last);
         strcpy(node->first, newBook->first);
 
-        node->next = newBook;
+        node->next = header;
         header = node;
+    }
+
+    void printList() {
+        struct book *current = header;
+        while(current != 0){
+            printf("%s\n", current->isbn);
+            printf("%s\n", current->title);
+            printf("%s\n", current->last);
+            printf("%s\n", current->first);
+            current = current->next;
+        }
     }
