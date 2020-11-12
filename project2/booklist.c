@@ -4,10 +4,7 @@
 #include <ctype.h>
 #include "booklist.h"
 
-    struct book *header = 0;
-    struct book *trailer = 0;
-
-    void add(struct book *newBook){
+    struct book* add(struct book *header, struct book *newBook){
         struct book *node = (struct book*)malloc(sizeof(struct book));
 
         node->numCopies = 1;
@@ -18,9 +15,10 @@
 
         node->next = header;
         header = node;
+        return header;
     }
 
-    void printList() {
+    void printList(struct book* header) {
         struct book *current = header;
         while(current != 0){
             printf("%s\n", current->isbn);

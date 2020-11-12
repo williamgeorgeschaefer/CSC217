@@ -14,6 +14,7 @@ int main() {
     char last[200];
     char first[200];
     struct book myBook;
+    struct book *header = 0;
 
     int i = findLine(line, 1000);
     while(line[0] != '\0'){
@@ -72,12 +73,12 @@ int main() {
         strcpy(myBook.last, last);
         strcpy(myBook.first, first);
 
-        add(&myBook);
+        header = add(header, &myBook);
         numLines++;
 
         i = findLine(line, 1000);
     }
-    printList();
+    printList(header);
     return 0;
 }
 

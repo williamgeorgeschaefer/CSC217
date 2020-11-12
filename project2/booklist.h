@@ -7,5 +7,5 @@ struct book{
         struct book *next;
     };
 
-void add(struct book *newBook);
-void printList();
+struct book* add(struct book *header, struct book *newBook);
+void printList(struct book* header);
