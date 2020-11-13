@@ -16,6 +16,8 @@ int main() {
     char first[200];
     struct book myBook;
     struct book *header = 0;
+    int accept = 0;
+    int reject = 0;
 
     int i = findLine(line, 1000);
     while(line[0] != '\0'){
@@ -78,18 +80,25 @@ int main() {
         strcpy(myBook.last, last);
         strcpy(myBook.first, first);
 
-        struct book *target = bookSearch(&myBook, myBook.isbn);
-        if((target != 0) && (bookCompare(&myBook, target) == 1)){
+        struct book *target = bookSearch(header, myBook.isbn);
+        if((target != 0) && (bookCompare(header, target) == 1)){
             target->numCopies++;
+            accept++;
+        }
+        else if((target != 0) && (bookCompare(header, target) == 0)){
+            reject++;
         }
         else{
             header = add(header, &myBook);
+            accept++;
         }
         numLines++;
 
         i = findLine(line, 1000);
     }
     printList(header);
+    printf("%d\n", accept);
+    printf("%d\n", reject);
     return 0;
 }
 
