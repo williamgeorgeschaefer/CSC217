@@ -78,7 +78,10 @@ int main() {
         strcpy(myBook.last, last);
         strcpy(myBook.first, first);
 
-        header = add(header, &myBook);
+        struct book *target = bookSearch(&myBook, myBook.isbn);
+        if((target != 0) && (bookCompare(&myBook, target) == 1)){
+            header = add(header, &myBook);
+        }
         numLines++;
 
         i = findLine(line, 1000);

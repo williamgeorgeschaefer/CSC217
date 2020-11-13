@@ -29,13 +29,22 @@
         }
     }
 
-    int bookSearch(struct book *header, char targetisbn[]){
+    struct book* bookSearch(struct book *header, char targetisbn[]){
         struct book *current = header;
         while(current != 0){
             if(strcmp(header->isbn, targetisbn) == 0){
-                return 1;
+                return current;
             }
             current = current->next;
         }
         return 0;
+    }
+
+    int bookCompare(struct book *book1, struct book *book2){
+        if((strcmp(book1->title, book2->title) == 0) && (strcmp(book1->last, book2->last) == 0) && (strcmp(book1->first, book2->first) == 0)){
+            return 1;
+        }
+        else{
+            return 0;
+        }
     }
