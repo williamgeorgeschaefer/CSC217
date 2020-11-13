@@ -5,7 +5,7 @@
 #include "booklist.h"
 
 int findLine(char s[], int lim);
-char calcCheck(struct book* myBook);
+char calcCheck(struct book *myBook);
 
 int main() {
     int numLines = 0;
@@ -21,14 +21,15 @@ int main() {
 
     int i = findLine(line, 1000);
     while(line[0] != '\0'){
+        if(line[0] == '\n'){
+            i = findLine(line, 1000);
+            continue;
+        }
         int index = 0;
         int digits = 0;
         while(digits < 10 && line[index] != '\0') {
             if(line[index] != ' ' && line[index] != '-' && line[index] != '\n'){
                 isbn[digits] = line[index];
-                if(digits == 9){
-                    isbn[digits] = calcCheck(&myBook);
-                }
                 digits++;
             }
             index++;
@@ -81,11 +82,11 @@ int main() {
         strcpy(myBook.first, first);
 
         struct book *target = bookSearch(header, myBook.isbn);
-        if((target != 0) && (bookCompare(header, target) == 1)){
+        if((target != 0) && (bookCompare(target, &myBook) == 1)){
             target->numCopies++;
             accept++;
         }
-        else if((target != 0) && (bookCompare(header, target) == 0)){
+        else if((target != 0) && (bookCompare(target, &myBook) == 0)){
             reject++;
         }
         else{
@@ -129,7 +130,7 @@ char calcCheck(struct book *myBook) {
         d = 'X';
     }
     else{
-        d = (char) result;
+        d = result + '0';
     }
     return d;
 }

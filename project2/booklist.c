@@ -33,7 +33,7 @@
     struct book* bookSearch(struct book *header, char targetisbn[]){
         struct book *current = header;
         while(current != 0){
-            if(strcmp(header->isbn, targetisbn) == 0){
+            if(strcmp(current->isbn, targetisbn) == 0){
                 return current;
             }
             current = current->next;
