@@ -82,11 +82,16 @@ int main() {
         strcpy(myBook.first, first);
 
         struct book *target = bookSearch(header, myBook.isbn);
+        char myBookCheck = calcCheck(&myBook);
+        char targetBookCheck = calcCheck(target);
         if((target != 0) && (bookCompare(target, &myBook) == 1)){
             target->numCopies++;
             accept++;
         }
         else if((target != 0) && (bookCompare(target, &myBook) == 0)){
+            reject++;
+        }
+        else if((target != 0) && (myBookCheck != targetBookCheck)){
             reject++;
         }
         else{
