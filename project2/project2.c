@@ -5,6 +5,7 @@
 #include "booklist.h"
 
 int findLine(char s[], int lim);
+char calcCheck(struct book* myBook);
 
 int main() {
     int numLines = 0;
@@ -23,10 +24,14 @@ int main() {
         while(digits < 10 && line[index] != '\0') {
             if(line[index] != ' ' && line[index] != '-' && line[index] != '\n'){
                 isbn[digits] = line[index];
+                if(digits == 9){
+                    isbn[digits] = calcCheck(&myBook);
+                }
                 digits++;
             }
             index++;
         }
+
         isbn[digits] = '\0';
         //printf("%s\n", isbn);
         int numQuotes = 0;
@@ -94,4 +99,22 @@ int findLine(char s[], int lim) {
     }
     s[i] = '\0';
     return i;
+}
+
+//Function to calculate the check digit
+char calcCheck(struct book *myBook) {
+    int s = 0;
+    int result;
+    char d;
+    for(int i = 10; i >= 2; i--) {
+        s += ((int) myBook->isbn[i - 2]) * i;
+    }
+    result = (11 - (s % 11)) % 11;
+    if(result == 10){
+        d = 'X';
+    }
+    else{
+        d = (char) result;
+    }
+    return d;
 }

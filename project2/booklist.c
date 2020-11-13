@@ -28,3 +28,14 @@
             current = current->next;
         }
     }
+
+    int bookSearch(struct book *header, char targetisbn[]){
+        struct book *current = header;
+        while(current != 0){
+            if(strcmp(header->isbn, targetisbn) == 0){
+                return 1;
+            }
+            current = current->next;
+        }
+        return 0;
+    }
