@@ -80,6 +80,9 @@ int main() {
 
         struct book *target = bookSearch(&myBook, myBook.isbn);
         if((target != 0) && (bookCompare(&myBook, target) == 1)){
+            target->numCopies++;
+        }
+        else{
             header = add(header, &myBook);
         }
         numLines++;

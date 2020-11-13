@@ -21,6 +21,7 @@
     void printList(struct book* header) {
         struct book *current = header;
         while(current != 0){
+            printf("%d\n", current->numCopies);
             printf("%s\n", current->isbn);
             printf("%s\n", current->title);
             printf("%s\n", current->last);
