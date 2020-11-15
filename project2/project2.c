@@ -83,17 +83,14 @@ int main() {
 
         struct book *target = bookSearch(header, myBook.isbn);
         char myBookCheck = calcCheck(&myBook);
-        char targetBookCheck = calcCheck(target);
-        if(((target != 0) && (myBookCheck != targetBookCheck)) || (targetBookCheck == '\0')){
-            reject++;
-            i = findLine(line, 1000);
-            continue;
-        }
         if((target != 0) && (bookCompare(target, &myBook) == 1)){
             target->numCopies++;
             accept++;
         }
         else if((target != 0) && (bookCompare(target, &myBook) == 0)){
+            reject++;
+        }
+        else if(myBookCheck != myBook.isbn[9]){
             reject++;
         }
         else{
@@ -126,10 +123,13 @@ int findLine(char s[], int lim) {
 
 //Function to calculate the check digit
 char calcCheck(struct book *myBook) {
+    if(myBook == 0){
+        return '\0';
+    }
     int s = 0;
     int result = 0;
     char d = '\0';
-    if(isbnLen(myBook) < 9 || isbnLen(myBook) == '\0'){
+    if(strlen(myBook->isbn) < 9){
         return '\0';
     }
     for(int i = 0; i < 9; i++) {
