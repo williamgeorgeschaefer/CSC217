@@ -102,8 +102,9 @@ int main() {
         i = findLine(line, 1000);
     }
     printList(header);
-    printf("%d\n", accept);
-    printf("%d\n", reject);
+    printf("%d%s\n", numLines, " lines of input were processed.");
+    printf("%d%s\n", accept, " lines were accepted.");
+    printf("%d%s\n", reject, " lines were rejected.");
     return 0;
 }
 
@@ -143,18 +144,4 @@ char calcCheck(struct book *myBook) {
         d = result + '0';
     }
     return d;
-}
-
-//Function to check ISBN length.
-int isbnLen(struct book *myBook) {
-    if(myBook == 0){
-        return '\0';
-    }
-    int len = 0;
-    int i = 0;
-    while(myBook->isbn[i] != '\0'){
-        len++;
-        i++;
-    }
-    return len;
 }
