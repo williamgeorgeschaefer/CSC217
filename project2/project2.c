@@ -22,17 +22,22 @@ char calcCheck(struct book *myBook);
 
 int main() {
     int numLines = 0; //number of lines read in so far
+
     char line[1000]; //the book currently being read in
+
     char isbn[11]; //the ISBN of the book currently being read in
     char title[200]; //the title of the book currently being read in
     char last[200]; //the last name of the author of the book currently being read in
     char first[200]; //the first name of the author of the book currently being read in
+
     struct book myBook; //the book currently being processed
     struct book *header = 0; //the book at the front of the linked list
+
     int accept = 0; //number of lines that have been accepted
     int reject = 0; //number of lines that have been rejected
-    struct invalidLine invalidLine;
-    struct invalidLine *header2 = 0;
+
+    struct invalidLine invalidLine; //the invalid line to be processed if that is the case
+    struct invalidLine *header2 = 0; //the header of the list of invalid lines
 
     int i = findLine(line, 1000); //integer returned after reading in a line of input
     while(line[0] != '\0'){
