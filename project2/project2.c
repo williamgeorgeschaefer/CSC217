@@ -32,7 +32,7 @@ int main() {
     int accept = 0; //number of lines that have been accepted
     int reject = 0; //number of lines that have been rejected
     struct invalidLine invalidLine;
-    struct invalidLine *header = 0;
+    struct invalidLine *header2 = 0;
 
     int i = findLine(line, 1000); //integer returned after reading in a line of input
     while(line[0] != '\0'){

@@ -7,7 +7,14 @@ invalidlist.c
 This code contains functions to add invalid lines to the
 linked list containing them, and print the items in the list. */
 
-    struct invalidLine* add(struct invalidLine *header, struct invalidLine *newInvalidLine){
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include "booklist.h"
+#include "invalidlist.h"
+
+    struct invalidLine* addNewInvalidLine(struct invalidLine *header, struct invalidLine *newInvalidLine){
         struct invalidLine *node = (struct invalidLine*)malloc(sizeof(struct invalidLine));
 
         strcpy(node->line, newInvalidLine->line);

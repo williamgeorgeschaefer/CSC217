@@ -13,6 +13,7 @@ and compare two books. */
 #include <string.h>
 #include <ctype.h>
 #include "booklist.h"
+#include "invalidlist.h"
 
     struct book* add(struct book *header, struct book *newBook){
         struct book *node = (struct book*)malloc(sizeof(struct book));
