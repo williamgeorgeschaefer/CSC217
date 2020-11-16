@@ -1,3 +1,13 @@
+/* William Schaefer (N00857559@students.ncc.edu)
+CSC 217
+Project 2: "Bookstore Part 1"
+Due November 25, 2020 at 11:59 pm
+booklist.c 
+
+This code contains functions to add books to the
+linked list, print the items in the list, search for books
+and compare two books. */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,11 +31,7 @@
     void printList(struct book* header) {
         struct book *current = header;
         while(current != 0){
-            printf("%d\n", current->numCopies);
-            printf("%s\n", current->isbn);
-            printf("%s\n", current->title);
-            printf("%s\n", current->last);
-            printf("%s\n", current->first);
+            printf("%s%s%s%s%d%s\n", current->title, " (", current->last, "): ", current->numCopies, " copies");
             current = current->next;
         }
     }
