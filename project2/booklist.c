@@ -22,15 +22,23 @@ and compare two books. */
         strcpy(node->title, newBook->title);
         strcpy(node->last, newBook->last);
         strcpy(node->first, newBook->first);
+        node->next = 0;
+
+        if(header == 0){
+            return node;
+        }
+        struct book *current = header;
+        struct book *previous = header;
 
         //Alphabetizes the list of books by title
-        while(strcmp(node->title, /* Figuring it out... */) < 0){
-            node = node->next;
+        while(current != 0 && strcmp(current->title, node->title) < 0){
+            previous = current;
+            current = current->next;
         }
         
 
-        node->next = header;
-        header = node;
+        node->next = current;
+        previous->next = node;
         return header;
     }
 
