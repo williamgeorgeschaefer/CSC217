@@ -1,11 +1,14 @@
 project2: project2.o booklist.o invalidlist.o
-	gcc -o project2 project2.o booklist.o invalidlist.o -g 
+	gcc -g -o project2 project2.o booklist.o invalidlist.o
 	
+clean: 
+	rm project2.o booklist.o invalidlist.o project2
+
 project2.o: project2.c booklist.h invalidlist.h
-	gcc -c project2.c -g
+	gcc -c -g project2.c
 
 booklist.o: booklist.c booklist.h
-	gcc -c booklist.c -g
+	gcc -c -g booklist.c
 
 invalidlist.o: invalidlist.c invalidlist.h
-	gcc -c invalidlist.c -g
+	gcc -c -g invalidlist.c

@@ -7,7 +7,7 @@ struct book{
         struct book *next;
     };
 
-struct book* add(struct book *header, struct book *newBook);
+struct book* add(struct book *header, struct book *newBook, int authorSortActive);
 void printList(struct book* header);
 struct book* bookSearch(struct book *header, char targetisbn[]);
 int bookCompare(struct book *book1, struct book *book2);

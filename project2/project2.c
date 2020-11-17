@@ -1,14 +1,14 @@
-/* William Schaefer (N00857559@students.ncc.edu)
-CSC 217
-Project 2: "Bookstore Part 1"
-Due November 25, 2020 at 11:59 pm
-project2.c 
-
-This code reads in lines from standard input representing
-books being shipped to the bookstore.  It creates structures
-containing information on a particular book, and stores them
-in a linked list.  It also accepts and rejects lines based on
-the validity of what is passed in. */
+// William Schaefer (N00857559@students.ncc.edu)
+// CSC 217
+// Project 2: "Bookstore Part 1"
+// Due November 25, 2020 at 11:59 pm
+// project2.c 
+//
+// This code reads in lines from standard input representing
+// books being shipped to the bookstore.  It creates structures
+// containing information on a particular book, and stores them
+// in a linked list.  It also accepts and rejects lines based on
+// the validity of what is passed in.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,15 +20,19 @@ the validity of what is passed in. */
 int findLine(char s[], int lim);
 char calcCheck(struct book *myBook);
 
-/* I learned how to use command line parameters from the following website:
-
-http://farside.ph.utexas.edu/teaching/329/lectures/node23.html */
+// I learned how to use command line parameters from the following website:
+// http://farside.ph.utexas.edu/teaching/329/lectures/node23.html
 
 int main(int argc, char *argv[]) {
 
     int invalidLinesActive = 0; //Used to see if the switch to print rejected lines is active
     if(argc == 2 && strcmp(argv[1], "-r") == 0){
         invalidLinesActive = 1;
+    }
+
+    int authorSortActive = 0;
+    if(argc == 2 && strcmp(argv[1], "-a") == 0){
+        authorSortActive = 1;
     }
 
     int numLines = 0; //number of lines read in so far
@@ -41,13 +45,13 @@ int main(int argc, char *argv[]) {
     char first[200]; //the first name of the author of the book currently being read in
 
     struct book myBook; //the book currently being processed
-    struct book *header = 0; //the book at the front of the linked list
+    struct book *booksHeader = 0; //the book at the front of the linked list
 
     int accept = 0; //number of lines that have been accepted
     int reject = 0; //number of lines that have been rejected
 
     struct invalidLine invalidLine; //the invalid line to be processed if that is the case
-    struct invalidLine *header2 = 0; //the header of the list of invalid lines
+    struct invalidLine *invalidLinesHeader = 0; //the header of the list of invalid lines
 
     int i = findLine(line, 1000); //integer returned after reading in a line of input
     while(line[0] != '\0'){
@@ -108,7 +112,7 @@ int main(int argc, char *argv[]) {
         strcpy(myBook.last, last);
         strcpy(myBook.first, first);
 
-        struct book *target = bookSearch(header, myBook.isbn);
+        struct book *target = bookSearch(booksHeader, myBook.isbn);
         char myBookCheck = calcCheck(&myBook);
         //Increment number of copies if book is found and the processed book has matching input
         if((target != 0) && (bookCompare(target, &myBook) == 1)){
@@ -118,16 +122,16 @@ int main(int argc, char *argv[]) {
         //Reject line if ISBN's match but one of the other fields is different
         else if((target != 0) && (bookCompare(target, &myBook) == 0)){
             reject++;
-            header2 = addNewInvalidLine(header2, line);
+            invalidLinesHeader = addNewInvalidLine(invalidLinesHeader, line);
         }
         //Reject line if check digits are different
         else if(myBookCheck != myBook.isbn[9]){
             reject++;
-            header2 = addNewInvalidLine(header2, line);
+            invalidLinesHeader = addNewInvalidLine(invalidLinesHeader, line);
         }
         //If list is empty, set header to the book being processed
         else{
-            header = add(header, &myBook);
+            booksHeader = add(booksHeader, &myBook, authorSortActive);
             accept++;
         }
         //Increment the number of lines and update i to read in the next line of input
@@ -137,12 +141,12 @@ int main(int argc, char *argv[]) {
     }
     //Output
     printf("%d%s\n", numLines, " lines of input were processed.\n");
-    printList(header);
+    printList(booksHeader);
     printf("\n%d%s\n", accept, " lines were accepted.");
     printf("%d%s\n", reject, " lines were rejected.");
     if(invalidLinesActive == 1){
         printf("\n%s\n", "The following lines were rejected:\n");
-        printInvalidList(header2);
+        printInvalidList(invalidLinesHeader);
     }
     return 0;
 }
