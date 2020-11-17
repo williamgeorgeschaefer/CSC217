@@ -29,13 +29,18 @@ struct book* add(struct book *header, struct book *newBook, int authorSortActive
     strcpy(node->first, newBook->first);
     node->next = 0;
 
+    // List is empty.
     if(header == 0){
         return node;
     }
+    // Author sort is inactive, and the title of the book node being 
+    // added to the list comes first alphabetically.
     if(authorSortActive == 0 && strcmp(header->title, node->title) > 0){
         node->next = header;
         return node;
     }
+    // Author sort is active, and the last name of the author of the book
+    // node being added to the list comes first alphabetically.
     else if(authorSortActive != 0 && strcmp(header->last, node->last) > 0){
         node->next = header;
         return node;
@@ -43,13 +48,16 @@ struct book* add(struct book *header, struct book *newBook, int authorSortActive
     struct book *current = header;
     struct book *previous = header;
 
-    //Alphabetizes the list of books by title
+    // If the author sorting command is active, this method will
+    // alphabetize the list of books by author's last name.
     if(authorSortActive == 0){
         while(current != 0 && strcmp(current->title, node->title) < 0){
             previous = current;
             current = current->next;
         }
     }
+    // If the author sorting command is inactive, this method will
+    // alphabetize the list of books by title.
     else{
         while(current != 0 && strcmp(current->last, node->last) < 0){
             previous = current;
@@ -72,8 +80,11 @@ void printList(struct book* header) {
         current = current->next;
     }
 }
-/* Book Search function - 
-*/
+
+// Book Search function - Accepts two arguments, the former being a
+// struct book representing the head of the linked list of books, the
+// latter being a character array representing the ISBN of the book
+// that is being searched.
 struct book* bookSearch(struct book *header, char targetisbn[]){
     struct book *current = header;
     while(current != 0){
@@ -85,6 +96,9 @@ struct book* bookSearch(struct book *header, char targetisbn[]){
     return 0;
 }
 
+// Book Compare function - Accepts two struct book arguments
+// and compares the title, last name and first name.  This function
+// is not called until after we know that both books have the same ISBN.
 int bookCompare(struct book *book1, struct book *book2){
     if((strcmp(book1->title, book2->title) == 0) && (strcmp(book1->last, book2->last) == 0) && (strcmp(book1->first, book2->first) == 0)){
         return 1;
