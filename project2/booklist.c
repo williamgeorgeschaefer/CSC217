@@ -17,12 +17,17 @@ and compare two books. */
 
     struct book* add(struct book *header, struct book *newBook){
         struct book *node = (struct book*)malloc(sizeof(struct book));
-
         node->numCopies = 1;
         strcpy(node->isbn, newBook->isbn);
         strcpy(node->title, newBook->title);
         strcpy(node->last, newBook->last);
         strcpy(node->first, newBook->first);
+
+        //Alphabetizes the list of books by title
+        while(strcmp(node->title, /* Figuring it out... */) < 0){
+            node = node->next;
+        }
+        
 
         node->next = header;
         header = node;

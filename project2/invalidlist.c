@@ -14,6 +14,7 @@ linked list containing them, and print the items in the list. */
 #include "booklist.h"
 #include "invalidlist.h"
 
+    //List is reversed because new items are placed in the beginning of the list.
     struct invalidLine* addNewInvalidLine(struct invalidLine *header, char newInvalidLine[]){
         struct invalidLine *node = (struct invalidLine*)malloc(sizeof(struct invalidLine));
 
@@ -24,11 +25,13 @@ linked list containing them, and print the items in the list. */
         return header;
     }
 
+    //Recursively reverses the order of the list.
     void printInvalidList(struct invalidLine* header){
-        printf("%s\n", "The following lines were rejected:\n");
-        struct invalidLine* current = header;
-        while(current != 0){
-            printf("%s\n", current->line);
-            current = current->next;
+        if(header == 0){
+            return;
         }
+        if(header->next != 0){
+            printInvalidList(header->next);
+        }
+        printf("%s", header->line);
     }

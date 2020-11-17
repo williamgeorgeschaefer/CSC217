@@ -20,7 +20,17 @@ the validity of what is passed in. */
 int findLine(char s[], int lim);
 char calcCheck(struct book *myBook);
 
-int main() {
+/* I learned how to use command line parameters from the following website:
+
+http://farside.ph.utexas.edu/teaching/329/lectures/node23.html */
+
+int main(int argc, char *argv[]) {
+
+    int invalidLinesActive = 0; //Used to see if the switch to print rejected lines is active
+    if(argc == 2 && strcmp(argv[1], "-r") == 0){
+        invalidLinesActive = 1;
+    }
+
     int numLines = 0; //number of lines read in so far
 
     char line[1000]; //the book currently being read in
@@ -128,11 +138,12 @@ int main() {
     //Output
     printf("%d%s\n", numLines, " lines of input were processed.\n");
     printList(header);
-    printf("\n");
-    printf("%d%s\n", accept, " lines were accepted.");
+    printf("\n%d%s\n", accept, " lines were accepted.");
     printf("%d%s\n", reject, " lines were rejected.");
-    printf("\n");
-    printInvalidList(header2);
+    if(invalidLinesActive == 1){
+        printf("\n%s\n", "The following lines were rejected:\n");
+        printInvalidList(header2);
+    }
     return 0;
 }
 
