@@ -108,10 +108,12 @@ int main() {
         //Reject line if ISBN's match but one of the other fields is different
         else if((target != 0) && (bookCompare(target, &myBook) == 0)){
             reject++;
+            header2 = addNewInvalidLine(header2, line);
         }
         //Reject line if check digits are different
         else if(myBookCheck != myBook.isbn[9]){
             reject++;
+            header2 = addNewInvalidLine(header2, line);
         }
         //If list is empty, set header to the book being processed
         else{
@@ -129,6 +131,8 @@ int main() {
     printf("\n");
     printf("%d%s\n", accept, " lines were accepted.");
     printf("%d%s\n", reject, " lines were rejected.");
+    printf("\n");
+    printInvalidList(header2);
     return 0;
 }
 

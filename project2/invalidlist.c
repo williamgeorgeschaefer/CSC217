@@ -14,12 +14,21 @@ linked list containing them, and print the items in the list. */
 #include "booklist.h"
 #include "invalidlist.h"
 
-    struct invalidLine* addNewInvalidLine(struct invalidLine *header, struct invalidLine *newInvalidLine){
+    struct invalidLine* addNewInvalidLine(struct invalidLine *header, char newInvalidLine[]){
         struct invalidLine *node = (struct invalidLine*)malloc(sizeof(struct invalidLine));
 
-        strcpy(node->line, newInvalidLine->line);
+        strcpy(node->line, newInvalidLine);
 
         node->next = header;
         header = node;
         return header;
+    }
+
+    void printInvalidList(struct invalidLine* header){
+        printf("%s\n", "The following lines were rejected:\n");
+        struct invalidLine* current = header;
+        while(current != 0){
+            printf("%s\n", current->line);
+            current = current->next;
+        }
     }

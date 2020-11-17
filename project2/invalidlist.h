@@ -3,4 +3,4 @@ struct invalidLine{
         struct invalidLine *next;
     };
 
-struct invalidLine* addNewInvalidLine(struct invalidLine *header, struct invalidLine *newInvalidLine);
+struct invalidLine* addNewInvalidLine(struct invalidLine *header, char newInvalidLine[]);
