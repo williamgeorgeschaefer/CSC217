@@ -1,0 +1,1 @@
+int populateBook(struct book* newBook, char line[]);

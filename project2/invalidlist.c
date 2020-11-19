@@ -13,6 +13,7 @@ linked list containing them, and print the items in the list. */
 #include <ctype.h>
 #include "booklist.h"
 #include "invalidlist.h"
+#include "createbook.h"
 
     //List is reversed because new items are placed in the beginning of the list.
     struct invalidLine* addNewInvalidLine(struct invalidLine *header, char newInvalidLine[]){

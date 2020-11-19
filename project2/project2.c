@@ -16,6 +16,7 @@
 #include <ctype.h>
 #include "booklist.h"
 #include "invalidlist.h"
+#include "createbook.h"
 
 int findLine(char s[], int lim);
 char calcCheck(struct book *myBook);
@@ -30,7 +31,7 @@ int main(int argc, char *argv[]) {
         invalidLinesActive = 1;
     }
 
-    int authorSortActive = 0;
+    int authorSortActive = 0; //Used to see if the switch to sort the books by author's last name is active
     if(argc == 2 && strcmp(argv[1], "-a") == 0){
         authorSortActive = 1;
     }
@@ -60,80 +61,35 @@ int main(int argc, char *argv[]) {
             i = findLine(line, 1000);
             continue;
         }
-        int index = 0; //the index currently being processed
-        int digits = 0; //number of digits in the ISBN of the book being read in.
-        while(digits < 10 && line[index] != '\0') {
-            if(line[index] != ' ' && line[index] != '-' && line[index] != '\n'){
-                isbn[digits] = line[index];
-                digits++;
+        int success = populateBook(&myBook, line);
+        if(success == 1){
+            struct book *target = bookSearch(booksHeader, myBook.isbn);
+            char myBookCheck = calcCheck(&myBook);
+            //Increment number of copies if book is found and the processed book has matching input
+            if((target != 0) && (bookCompare(target, &myBook) == 1)){
+                target->numCopies++;
+                accept++;
             }
-            index++;
-        }
-
-        isbn[digits] = '\0';
-        int numQuotes = 0; //number of quote characters read in
-        int titleIndex = 0; //index currently being processed when reading in the title
-        while(numQuotes < 2 && line[index] != '\0'){
-            if(numQuotes == 0){
-                if(line[index] == '\"'){
-                    numQuotes++;
-                }
+            //Reject line if ISBN's match but one of the other fields is different
+            else if((target != 0) && (bookCompare(target, &myBook) == 0)){
+                reject++;
+                invalidLinesHeader = addNewInvalidLine(invalidLinesHeader, line);
             }
+            //Reject line if check digits are different
+            else if(myBookCheck != myBook.isbn[9]){
+                reject++;
+                invalidLinesHeader = addNewInvalidLine(invalidLinesHeader, line);
+            }
+            //If list is empty, set header to the book being processed
             else{
-                if(line[index] == '\"'){
-                    numQuotes++;
-                }
-                else{
-                    title[titleIndex++] = line[index];
-                }
+                booksHeader = add(booksHeader, &myBook, authorSortActive);
+                accept++;
             }
-            index++;
         }
-        title[titleIndex] = '\0';
-        int lastIndex = 0; //index currently being processed when reading in the author's last name
-        while(line[index] != ',' && line[index] != '\0'){
-            if(line[index] != ' '){
-                last[lastIndex++] = line[index];
-            }
-            index++;
-        }
-        last[lastIndex] = '\0';
-        int firstIndex = 0; //index currently being processed when reading in the author's first name
-        while(line[index] != '\n' && line[index] != '\0'){
-            if(line[index] != ',' && line[index] != ' '){
-                first[firstIndex++] = line[index];
-            }
-            index++;
-        }
-        first[firstIndex] = '\0';
-        myBook.numCopies = 1;
-        strcpy(myBook.isbn, isbn);
-        strcpy(myBook.title, title);
-        strcpy(myBook.last, last);
-        strcpy(myBook.first, first);
-
-        struct book *target = bookSearch(booksHeader, myBook.isbn);
-        char myBookCheck = calcCheck(&myBook);
-        //Increment number of copies if book is found and the processed book has matching input
-        if((target != 0) && (bookCompare(target, &myBook) == 1)){
-            target->numCopies++;
-            accept++;
-        }
-        //Reject line if ISBN's match but one of the other fields is different
-        else if((target != 0) && (bookCompare(target, &myBook) == 0)){
-            reject++;
-            invalidLinesHeader = addNewInvalidLine(invalidLinesHeader, line);
-        }
-        //Reject line if check digits are different
-        else if(myBookCheck != myBook.isbn[9]){
-            reject++;
-            invalidLinesHeader = addNewInvalidLine(invalidLinesHeader, line);
-        }
-        //If list is empty, set header to the book being processed
         else{
-            booksHeader = add(booksHeader, &myBook, authorSortActive);
-            accept++;
+            reject++;     
         }
+        
         //Increment the number of lines and update i to read in the next line of input
         numLines++;
 
@@ -179,6 +135,9 @@ char calcCheck(struct book *myBook) {
     for(int i = 0; i < 9; i++) {
         s += (((int) myBook->isbn[i]) - '0') * (10 - i);
     }
+    // I called the modular operator twice because if
+    // s % 11 == 0, result would be equal to 11 and you
+    // can't return a single character.
     result = (11 - (s % 11)) % 11;
     if(result == 10){
         d = 'X';
