@@ -61,7 +61,8 @@ int main(int argc, char *argv[]) {
             i = findLine(line, 1000);
             continue;
         }
-        int success = populateBook(&myBook, line);
+        int success = populateBook(&myBook, line); //integer variable representing the success
+        //or failure of inserting a book
         if(success == 1){
             struct book *target = bookSearch(booksHeader, myBook.isbn);
             char myBookCheck = calcCheck(&myBook);
@@ -86,6 +87,7 @@ int main(int argc, char *argv[]) {
                 accept++;
             }
         }
+        //Insert process fails
         else{
             reject++;     
         }
@@ -121,7 +123,7 @@ int findLine(char s[], int lim) {
     return i;
 }
 
-//Function to calculate the check digit
+// Function to calculate the check digit
 char calcCheck(struct book *myBook) {
     if(myBook == 0){
         return '\0';
@@ -129,9 +131,11 @@ char calcCheck(struct book *myBook) {
     int s = 0;
     int result = 0;
     char d = '\0';
+    // Not enough digits in ISBN
     if(strlen(myBook->isbn) < 9){
         return '\0';
     }
+    // Calculate check digit
     for(int i = 0; i < 9; i++) {
         s += (((int) myBook->isbn[i]) - '0') * (10 - i);
     }

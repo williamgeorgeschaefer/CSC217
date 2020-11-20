@@ -1,11 +1,11 @@
-/* William Schaefer (N00857559@students.ncc.edu)
-CSC 217
-Project 2: "Bookstore Part 1"
-Due November 25, 2020 at 11:59 pm
-invalidlist.c 
+// William Schaefer (N00857559@students.ncc.edu)
+// CSC 217
+// Project 2: "Bookstore Part 1"
+// Due November 25, 2020 at 11:59 pm
+// invalidlist.c 
 
-This code contains functions to add invalid lines to the
-linked list containing them, and print the items in the list. */
+// This code contains functions to add invalid lines to the
+// linked list containing them, and print the items in the list.
 
 #include <stdio.h>
 #include <stdlib.h>
