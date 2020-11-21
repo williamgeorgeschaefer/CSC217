@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
 
     int i = findLine(line, 1000); //integer returned after reading in a line of input
     while(line[0] != '\0'){
-        if(line[0] == '\n'){
+        if(isBlank(line)){
             numLines++;
             i = findLine(line, 1000);
             continue;

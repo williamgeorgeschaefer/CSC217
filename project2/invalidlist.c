@@ -18,6 +18,8 @@
     //List is reversed because new items are placed in the beginning of the list.
     struct invalidLine* addNewInvalidLine(struct invalidLine *header, char newInvalidLine[]){
         struct invalidLine *node = (struct invalidLine*)malloc(sizeof(struct invalidLine));
+        //Allocates JUST ENOUGH memory for the invalid line!
+        node->line = (char*)malloc((strlen(newInvalidLine)) + 1);
 
         strcpy(node->line, newInvalidLine);
 

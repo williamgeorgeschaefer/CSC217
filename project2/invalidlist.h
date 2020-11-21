@@ -1,5 +1,5 @@
 struct invalidLine{
-        char line[1000];
+        char* line;
         struct invalidLine *next;
     };
 

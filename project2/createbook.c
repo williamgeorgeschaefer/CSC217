@@ -91,3 +91,18 @@ int populateBook(struct book* newBook, char line[]){
     //SUCCESS: We have reached the end of the line, having read in every parameter in the book structure
     return 1;
 }
+
+// Is Blank function - this function accepts one argument, a character array, and sees if it is composed
+// entirely of whitespace characters.  If so, it returns a nonzero value.  If not, it returns zero. 
+int isBlank(char line[]){
+    int i = 0;
+    while(line[i] != '\0' && isspace(line[i])){
+        i++;
+    }
+    if(line[i] == '\0'){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
