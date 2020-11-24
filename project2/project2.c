@@ -27,13 +27,20 @@ char calcCheck(struct book *myBook);
 int main(int argc, char *argv[]) {
 
     int invalidLinesActive = 0; //Used to see if the switch to print rejected lines is active
-    if(argc == 2 && strcmp(argv[1], "-r") == 0){
-        invalidLinesActive = 1;
-    }
-
     int authorSortActive = 0; //Used to see if the switch to sort the books by author's last name is active
-    if(argc == 2 && strcmp(argv[1], "-a") == 0){
-        authorSortActive = 1;
+
+    //Checks to see if either sorting switch is active.  Checks for -r, -a, -ar and -ra in any order.
+    for(int i = 0; i < argc; i++){
+        if(strcmp(argv[i], "-r") == 0){
+            invalidLinesActive = 1;
+        }
+        else if(strcmp(argv[i], "-a") == 0){
+            authorSortActive = 1;
+        }
+        else if(strcmp(argv[i], "-ar") == 0 || strcmp(argv[i], "-ra") == 0){
+            invalidLinesActive = 1;
+            authorSortActive = 1;
+        }
     }
 
     int numLines = 0; //number of lines read in so far
@@ -62,7 +69,7 @@ int main(int argc, char *argv[]) {
             continue;
         }
         int success = populateBook(&myBook, line); //integer variable representing the success
-        //or failure of inserting a book
+        //or failure of creating a book
         if(success == 1){
             struct book *target = bookSearch(booksHeader, myBook.isbn);
             char myBookCheck = calcCheck(&myBook);
@@ -89,7 +96,8 @@ int main(int argc, char *argv[]) {
         }
         //Insert process fails
         else{
-            reject++;     
+            reject++;
+            invalidLinesHeader = addNewInvalidLine(invalidLinesHeader, line);     
         }
         
         //Increment the number of lines and update i to read in the next line of input
@@ -105,6 +113,7 @@ int main(int argc, char *argv[]) {
     if(invalidLinesActive == 1){
         printf("\n%s\n", "The following lines were rejected:\n");
         printInvalidList(invalidLinesHeader);
+        printf("\n");
     }
     return 0;
 }

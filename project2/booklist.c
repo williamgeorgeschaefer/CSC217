@@ -9,7 +9,6 @@
 // and compare two books.  The nodes in the linked list are
 // stored alphabetically. 
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
