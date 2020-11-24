@@ -39,13 +39,13 @@ struct book* add(struct book *header, struct book *newBook, int authorSortActive
 
     // Author sort is inactive, and the title of the book node being 
     // added to the list comes first alphabetically.
-    if(authorSortActive == 0 && strcmp(header->title, node->title) > 0){
+    if(authorSortActive == 0 && bookCompareTitle(node, header) < 0){
         node->next = header;
         return node;
     }
     // Author sort is active, and the last name of the author of the book
     // node being added to the list comes first alphabetically.
-    else if(authorSortActive != 0 && strcmp(header->last, node->last) > 0){
+    else if(authorSortActive != 0 && bookCompareLast(node, header) < 0){
         node->next = header;
         return node;
     }
@@ -54,18 +54,18 @@ struct book* add(struct book *header, struct book *newBook, int authorSortActive
 
     // ...if no, search the list to find where it belongs.
 
-    // If the author sorting command is active, this method will
-    // alphabetize the list of books by author's last name.
+    // If the author sorting command is inactive, this method will
+    // alphabetize the list of books by title.
     if(authorSortActive == 0){
-        while(current != 0 && strcmp(current->title, node->title) < 0){
+        while(current != 0 && bookCompareTitle(current, node) < 0){
             previous = current;
             current = current->next;
         }
     }
-    // If the author sorting command is inactive, this method will
-    // alphabetize the list of books by title.
+    // If the author sorting command is active, this method will
+    // alphabetize the list of books by author's last name.
     else{
-        while(current != 0 && strcmp(current->last, node->last) < 0){
+        while(current != 0 && bookCompareLast(current, node) < 0){
             previous = current;
             current = current->next;
         }
@@ -102,36 +102,38 @@ struct book* bookSearch(struct book *header, char targetisbn[]){
     return 0;
 }
 
-// Book Compare function - Accepts two struct book arguments
+// Book Compare Title function - Accepts two struct book arguments
 // and compares the title, last name and first name.  This function
 // is not called until after we know that both books have the same ISBN.
 //
 // Compares book1 to book2; if book1 < book2, return -1; if book1 > book2,
 // return 1, otherwise, return 0
-int bookCompare(struct book *book1, struct book *book2){
-    if(strcmp(book1->title, book2->title) < 0){
-        return -1;
+int bookCompareTitle(struct book *book1, struct book *book2){
+    int val = strcmp(book1->title, book2->title); // val is equal to what is returned by the call to
+    // String Compare, +/- 1 or 0
+    if(val != 0){
+        return val;
     }
-    else if(strcmp(book1->title, book2->title) > 0){
-        return 1;
+    val = strcmp(book1->last, book2->last); //Comparing Authors' Last Names
+    if(val != 0){
+        return val;
     }
-    else{
-        if(strcmp(book1->last, book2->last) < 0){
-            return -1;
-        }
-        else if(strcmp(book1->last, book2->last) > 0){
-            return 1;
-        }
-        else{
-            if(strcmp(book1->first, book2->first) < 0){
-                return -1;
-            }
-            else if(strcmp(book1->first, book2->first) > 0){
-                return 1;
-            }
-            else{
-                return 0;
-            }
-        }
+    val = strcmp(book1->first, book2->first); //Comparing Authors' First Names
+    return val;
+}
+
+// Book Compare Last Function - Accepts two struct book arguments and compares
+// author's last name, first name and title.
+int bookCompareLast(struct book *book1, struct book *book2){
+    int val = strcmp(book1->last, book2->last); // val is equal to what is returned by the call to
+    // String Compare, +/- 1 or 0
+    if(val != 0){
+        return val;
     }
+    val = strcmp(book1->first, book2->first); //Comparing Authors' First Names
+    if(val != 0){
+        return val;
+    }
+    val = strcmp(book1->title, book2->title); //Comparing Titles
+    return val;
 }
