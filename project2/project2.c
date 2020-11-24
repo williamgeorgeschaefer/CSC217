@@ -74,12 +74,12 @@ int main(int argc, char *argv[]) {
             struct book *target = bookSearch(booksHeader, myBook.isbn);
             char myBookCheck = calcCheck(&myBook);
             //Increment number of copies if book is found and the processed book has matching input
-            if((target != 0) && (bookCompare(target, &myBook) == 1)){
+            if((target != 0) && (bookCompare(target, &myBook) == 0)){
                 target->numCopies++;
                 accept++;
             }
             //Reject line if ISBN's match but one of the other fields is different
-            else if((target != 0) && (bookCompare(target, &myBook) == 0)){
+            else if((target != 0) && (bookCompare(target, &myBook) != 0)){
                 reject++;
                 invalidLinesHeader = addNewInvalidLine(invalidLinesHeader, line);
             }

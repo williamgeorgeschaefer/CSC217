@@ -19,7 +19,8 @@
 
 // Add function - Accepts two struct book arguments, the former is
 // the head of the list and the latter is the book to be added.  The
-// nodes of the linked list are stored alphabetically.
+// nodes of the linked list are stored alphabetically.  It also accepts
+// an integer argument to denote whether the author sort is active or not.
 struct book* add(struct book *header, struct book *newBook, int authorSortActive){
     struct book *node = (struct book*)malloc(sizeof(struct book));
     node->numCopies = 1;
@@ -33,6 +34,9 @@ struct book* add(struct book *header, struct book *newBook, int authorSortActive
     if(header == 0){
         return node;
     }
+
+    // Is the node the first item in the list?  If yes, return the new header of the list...
+
     // Author sort is inactive, and the title of the book node being 
     // added to the list comes first alphabetically.
     if(authorSortActive == 0 && strcmp(header->title, node->title) > 0){
@@ -47,6 +51,8 @@ struct book* add(struct book *header, struct book *newBook, int authorSortActive
     }
     struct book *current = header;
     struct book *previous = header;
+
+    // ...if no, search the list to find where it belongs.
 
     // If the author sorting command is active, this method will
     // alphabetize the list of books by author's last name.
@@ -99,11 +105,33 @@ struct book* bookSearch(struct book *header, char targetisbn[]){
 // Book Compare function - Accepts two struct book arguments
 // and compares the title, last name and first name.  This function
 // is not called until after we know that both books have the same ISBN.
+//
+// Compares book1 to book2; if book1 < book2, return -1; if book1 > book2,
+// return 1, otherwise, return 0
 int bookCompare(struct book *book1, struct book *book2){
-    if((strcmp(book1->title, book2->title) == 0) && (strcmp(book1->last, book2->last) == 0) && (strcmp(book1->first, book2->first) == 0)){
+    if(strcmp(book1->title, book2->title) < 0){
+        return -1;
+    }
+    else if(strcmp(book1->title, book2->title) > 0){
         return 1;
     }
     else{
-        return 0;
+        if(strcmp(book1->last, book2->last) < 0){
+            return -1;
+        }
+        else if(strcmp(book1->last, book2->last) > 0){
+            return 1;
+        }
+        else{
+            if(strcmp(book1->first, book2->first) < 0){
+                return -1;
+            }
+            else if(strcmp(book1->first, book2->first) > 0){
+                return 1;
+            }
+            else{
+                return 0;
+            }
+        }
     }
 }
