@@ -19,7 +19,6 @@
 #include "createbook.h"
 #include "textbook.h"
 
-int findLine(char s[], int lim);
 char calcCheck(struct book *myBook);
 
 // I learned how to use command line parameters from the following website:
