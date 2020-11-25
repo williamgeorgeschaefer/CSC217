@@ -17,6 +17,7 @@
 #include "booklist.h"
 #include "invalidlist.h"
 #include "createbook.h"
+#include "textbook.h"
 
 int findLine(char s[], int lim);
 char calcCheck(struct book *myBook);
@@ -116,20 +117,6 @@ int main(int argc, char *argv[]) {
         printf("\n");
     }
     return 0;
-}
-
-//Reference to Get Line Function from textbook
-int findLine(char s[], int lim) {
-    int c, i;
-
-    for (i=0; i<lim-1 && (c=getchar())!=EOF && c!='\n'; ++i)
-        s[i] = c;
-    if(c == '\n') {
-        s[i] = c;
-        ++i;
-    }
-    s[i] = '\0';
-    return i;
 }
 
 // Function to calculate the check digit

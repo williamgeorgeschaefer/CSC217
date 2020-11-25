@@ -16,6 +16,7 @@
 #include "booklist.h"
 #include "invalidlist.h"
 #include "createbook.h"
+#include "textbook.h"
 
 // Populate Book function - this function accepts two arguments,
 // the former being an empty struct book, the latter being a character

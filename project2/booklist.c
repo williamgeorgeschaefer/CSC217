@@ -16,6 +16,7 @@
 #include "booklist.h"
 #include "invalidlist.h"
 #include "createbook.h"
+#include "textbook.h"
 
 // Add function - Accepts two struct book arguments, the former is
 // the head of the list and the latter is the book to be added.  The

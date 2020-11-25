@@ -14,6 +14,7 @@
 #include "booklist.h"
 #include "invalidlist.h"
 #include "createbook.h"
+#include "textbook.h"
 
     //List is reversed because new items are placed in the beginning of the list.
     struct invalidLine* addNewInvalidLine(struct invalidLine *header, char newInvalidLine[]){
