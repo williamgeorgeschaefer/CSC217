@@ -1,0 +1,1 @@
+int findLine(char s[], int lim);
