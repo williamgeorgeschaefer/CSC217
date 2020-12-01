@@ -30,7 +30,7 @@ int findLine(char s[], int lim) {
     return i;
 }
 
-//Variation of getLine() method to involve reading in from a file
+//Variation of getLine() function to involve reading in from a file
 int getLineFromFile(FILE *input, char s[], int lim){
     int c, i;
 
