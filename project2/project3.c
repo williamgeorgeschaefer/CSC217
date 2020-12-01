@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
     int invalidLinesActive = 0; //Used to see if the switch to print rejected lines is active
     int authorSortActive = 0; //Used to see if the switch to sort the books by author's last name is active
     char fileName[200] = "books.txt";
+    FILE *input = fopen(fileName, "r");
 
     //Checks to see if either sorting switch is active.  Checks for -r, -a, -ar and -ra in any order.
     for(int i = 0; i < argc; i++){
@@ -74,11 +75,11 @@ int main(int argc, char *argv[]) {
     struct invalidLine invalidLine; //the invalid line to be processed if that is the case
     struct invalidLine *invalidLinesHeader = 0; //the header of the list of invalid lines
 
-    int i = findLine(line, 1000); //integer returned after reading in a line of input
+    int i = getLineFromFile(input, line, 1000); //integer returned after reading in a line of input
     while(line[0] != '\0'){
         if(isBlank(line)){
             numLines++;
-            i = findLine(line, 1000);
+            i = getLineFromFile(input, line, 1000);
             continue;
         }
         int success = populateBook(&myBook, line); //integer variable representing the success
@@ -116,7 +117,7 @@ int main(int argc, char *argv[]) {
         //Increment the number of lines and update i to read in the next line of input
         numLines++;
 
-        i = findLine(line, 1000);
+        i = getLineFromFile(input, line, 1000);
     }
     //Output
     printf("%d%s\n", numLines, " lines of input were processed.\n");
