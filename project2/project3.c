@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
 
     int invalidLinesActive = 0; //Used to see if the switch to print rejected lines is active
     int authorSortActive = 0; //Used to see if the switch to sort the books by author's last name is active
+    char fileName[200] = "books.txt";
 
     //Checks to see if either sorting switch is active.  Checks for -r, -a, -ar and -ra in any order.
     for(int i = 0; i < argc; i++){
@@ -41,7 +42,19 @@ int main(int argc, char *argv[]) {
             invalidLinesActive = 1;
             authorSortActive = 1;
         }
+        else if(strcmp(argv[i], "-i") == 0){
+            if(argc > i + 1){
+                strcpy(fileName, argv[i + 1]);
+                i++;
+            }
+            else{
+                printf("%s\n", "Usage: ./project3 [-i filename]");
+                return 1;
+            }
+        }
     }
+
+    printf("%s\n", fileName);
 
     int numLines = 0; //number of lines read in so far
 

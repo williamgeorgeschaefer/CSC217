@@ -29,3 +29,17 @@ int findLine(char s[], int lim) {
     s[i] = '\0';
     return i;
 }
+
+//Variation of getLine() method to involve reading in from a file
+int getLineFromFile(FILE *input, char s[], int lim){
+    int c, i;
+
+    for (i=0; i<lim-1 && (c=fgetchar(input))!=EOF && c!='\n'; ++i)
+        s[i] = c;
+    if(c == '\n') {
+        s[i] = c;
+        ++i;
+    }
+    s[i] = '\0';
+    return i;
+}
