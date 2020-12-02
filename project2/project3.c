@@ -30,9 +30,6 @@ int main(int argc, char *argv[]) {
     int authorSortActive = 0; //Used to see if the switch to sort the books by author's last name is active
     char fileName[200] = "books.txt";
     FILE *input;
-    if(input != 0){
-        input = fopen(fileName, "r");
-    }
 
     //Checks to see if either sorting switch is active.  Checks for -r, -a, -ar and -ra in any order.
     for(int i = 0; i < argc; i++){
@@ -49,6 +46,9 @@ int main(int argc, char *argv[]) {
         else if(strcmp(argv[i], "-i") == 0){
             if(argc > i + 1){
                 strcpy(fileName, argv[i + 1]);
+                if(fileName != 0){
+                    input = fopen(fileName, "r");
+                }
                 i++;
             }
             else{
