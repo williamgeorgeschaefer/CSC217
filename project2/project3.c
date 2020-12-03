@@ -28,8 +28,10 @@ int main(int argc, char *argv[]) {
 
     int invalidLinesActive = 0; //Used to see if the switch to print rejected lines is active
     int authorSortActive = 0; //Used to see if the switch to sort the books by author's last name is active
-    char fileName[200] = "books.txt";
+    char inFileName[200] = "books.txt";
+    char outFileName[200] = "output.txt";
     FILE *input;
+    FILE *output;
 
     //Checks to see if either sorting switch is active.  Checks for -r, -a, -ar and -ra in any order.
     for(int i = 1; i < argc; i++){
@@ -45,28 +47,52 @@ int main(int argc, char *argv[]) {
         }
         else if(strcmp(argv[i], "-i") == 0){
             if(argc > i + 1){
-                strcpy(fileName, argv[i + 1]);
-                if(strlen(fileName) > 0){
-                    input = fopen(fileName, "r");
-                }
+                strcpy(inFileName, argv[i + 1]);
                 i++;
             }
             else{
-                fprintf(stderr, "%s%s%s\n", "Usage: ", argv[0], " [-i filename]");
+                fprintf(stderr, "%s%s%s\n", "Usage: ", argv[0], " [-i inFileName] [-o outFileName]");
+                fprintf(stderr, "%s%s%s\n", "OR: ", argv[0], " [-o outFileName] [-i inFileName]");
                 return 1;
             }
         }
+        else if(strcmp(argv[i], "-o") == 0){
+            if(argc > i + 1){
+                strcpy(outFileName, argv[i + 1]);
+                i++;
+            }
+            else{
+                fprintf(stderr, "%s%s%s\n", "Usage: ", argv[0], " [-i inFileName] [-o outFileName]");
+                fprintf(stderr, "%s%s%s\n", "OR: ", argv[0], " [-o outFileName] [-i inFileName]");
+                return 4;
+            }
+        }
+        else{
+            fprintf(stderr, "%s%s%s\n", "Usage: ", argv[0], " [-i inFileName] [-o outFileName]");
+            fprintf(stderr, "%s%s%s\n", "OR: ", argv[0], " [-o outFileName] [-i inFileName]");
+            return 3;
+        }
     }
 
-    if(strlen(fileName) > 0){
-        input = fopen(fileName, "r");
+    if(strlen(inFileName) > 0){
+        input = fopen(inFileName, "r");
+    }
+
+    if(strlen(outFileName) > 0){
+        output = fopen(outFileName, "w");
     }
 
     if(input == 0){
-        fprintf(stderr, "%s%s%s%s\n", argv[0], ": Input file ", fileName, " not found");
+        fprintf(stderr, "%s%s%s%s\n", argv[0], ": Input file ", inFileName, " not found");
         return 2;
     }
-    printf("%s\n", fileName);
+
+    if(output == 0){
+        fprintf(stderr, "%s%s%s%s\n", argv[0], ": Output file ", outFileName, " failed to open");
+        return 5;
+    }
+
+    printf("%s\n", inFileName);
 
     int numLines = 0; //number of lines read in so far
 
