@@ -92,7 +92,7 @@ void writeInventory(struct book* header, FILE *output){
     struct book *current = header;
     while(current != 0){
         for(int i = 0; i < current->numCopies; i++){
-            fprintf(output, "%s%s%s%s%d%s\n", current->title, " (", current->last, "): ", current->numCopies, " copies");
+            fprintf(output, "%s \"%s\" %s, %s\n", current->isbn, current->title, current->last, current->first);
         }
         current = current->next;
     }

@@ -166,6 +166,8 @@ int main(int argc, char *argv[]) {
         printInvalidList(invalidLinesHeader);
         printf("\n");
     }
+
+    writeInventory(booksHeader, output);
     return 0;
 }
 
