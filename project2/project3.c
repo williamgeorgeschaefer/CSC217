@@ -20,6 +20,7 @@
 #include "textbook.h"
 
 char calcCheck(struct book *myBook);
+void getisbn(char line[], char isbn[]);
 
 // I learned how to use command line parameters from the following website:
 // http://farside.ph.utexas.edu/teaching/329/lectures/node23.html
@@ -156,6 +157,26 @@ int main(int argc, char *argv[]) {
 
         i = getLineFromFile(input, line, 1000);
     }
+
+    while(1){
+        findLine(line, 1000);
+        char isbn[11];
+        struct book* target;
+        if(strcmp(line, "quit\n") == 0 || strcmp(line, "q\n") == 0){
+            printf("%s\n", "Process terminating...");
+            break;
+        }
+        getisbn(line, isbn);
+        target = bookSearch(booksHeader, isbn);
+        if(target == 0){
+            printf("%s\n", "The book you requested is not in the inventory.  Process continuing...");
+            continue;
+        }
+        else{
+            printf("%s\n", target->title);
+        }
+    }
+
     //Output
     printf("%d%s\n", numLines, " lines of input were processed.\n");
     printList(booksHeader);
@@ -198,4 +219,16 @@ char calcCheck(struct book *myBook) {
         d = result + '0';
     }
     return d;
+}
+
+void getisbn(char line[], char isbn[]){
+    int index = 0; //the index currently being processed
+    int digits = 0; //number of digits in the ISBN of the book being read in.
+    while(digits < 10 && line[index] != '\0') {
+        if(line[index] != ' ' && line[index] != '-' && line[index] != '\n'){
+            isbn[index] = line[index];
+            digits++;
+        }
+        index++;
+    }
 }
