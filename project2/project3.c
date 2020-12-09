@@ -159,9 +159,15 @@ int main(int argc, char *argv[]) {
     }
 
     while(1){
+        //Interactive input for the user
         findLine(line, 1000);
+        //Character array for the ISBN of the book being searched
         char isbn[11];
+        //Target book
         struct book* target;
+        //Number of copies being purchased
+        int purchaseCopies = purchase(line, isbn);
+        //Terminate program if the following condition is true
         if(strcmp(line, "quit\n") == 0 || strcmp(line, "q\n") == 0){
             printf("%s\n", "Process terminating...");
             break;
@@ -172,9 +178,10 @@ int main(int argc, char *argv[]) {
             printf("%s\n", "The book you requested is not in the inventory.  Process continuing...");
             continue;
         }
-        else{
-            printf("%s\n", target->title);
+        else if(line[10] == '\n'){
+            printf("%s%s%s%s%d%s\n", target->title, " (", target->last, "): ", target->numCopies, " copies");
         }
+        printf("%d\n", purchaseCopies);
     }
 
     //Output
@@ -230,5 +237,28 @@ void getisbn(char line[], char isbn[]){
             digits++;
         }
         index++;
+    }
+}
+
+int purchase(char line[], char isbn[]){
+    int index = 0; //the index currently being processed
+    int digits = 0; //number of digits in the ISBN of the book being read in.
+    while(digits < 10 && line[index] != '\0') {
+        if(line[index] != ' ' && line[index] != '-' && line[index] != '\n'){
+            isbn[index] = line[index];
+            digits++;
+        }
+        index++;
+    }
+
+    while(isspace(line[index])){
+        index++;
+    }
+
+    if(isdigit(line[index] == 0)){
+        return -1;
+    }
+    else{
+        return line[index] - '0';
     }
 }
