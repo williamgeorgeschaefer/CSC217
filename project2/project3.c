@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
         //Target book
         struct book* target;
         //Number of copies being purchased
-        int purchaseCopies = 0; //purchase(line, isbn);
+        int purchaseCopies = purchase(line, isbn);
         //Terminate program if the following condition is true
         if(strcmp(line, "quit\n") == 0 || strcmp(line, "q\n") == 0){
             printf("%s\n", "Process terminating...");
