@@ -175,6 +175,11 @@ int main(int argc, char *argv[]) {
             printf("%s\n", "Process terminating...");
             break;
         }
+        // Additional command to print the current condition of the inventory.
+        if(strcmp(line, "i\n") == 0){
+            writeInventory(booksHeader, stdout);
+            continue;
+        }
         target = bookSearch(booksHeader, isbn);
         if(target == 0){
             printf("%s\n", "The book you requested is not in the inventory.");
