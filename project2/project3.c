@@ -189,7 +189,9 @@ int main(int argc, char *argv[]) {
             target->numCopies -= purchaseCopies;
         }
         if(target->numCopies == 0){
-            // Remove item from linked list.
+            if(target == header){
+                
+            }
         }
         printf("%s%s%s%s%d%s\n", target->title, " (", target->last, "): ", target->numCopies, " copies");
     }

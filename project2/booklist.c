@@ -148,3 +148,25 @@ int bookCompareLast(struct book *book1, struct book *book2){
     val = strcmp(book1->title, book2->title); //Comparing Titles
     return val;
 }
+
+// Delete Function - Accepts two struct book pointer arguments, the header of the list and the node
+// to be removed from the list. 
+void delete(struct book* header, struct book* target){
+    struct book* current = header;
+    // Special case for deleting the first node in the list.
+    if(target == header){
+        header = header->next;
+        free(target);
+        return;
+    }
+    // Checking if current->next exists.  We are looking for a pointer to target.
+    while(current->next != target && current->next){
+        current = current->next;
+    }
+    // We are making sure we did not reach the end of the list.
+    if(current->next == target){
+        current->next = target->next;
+        free(target);
+        return;
+    }
+}
