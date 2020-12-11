@@ -22,6 +22,7 @@
 // the head of the list and the latter is the book to be added.  The
 // nodes of the linked list are stored alphabetically.  It also accepts
 // an integer argument to denote whether the author sort is active or not.
+// This method will return the header of the list.
 struct book* add(struct book *header, struct book *newBook, int authorSortActive){
     struct book *node = (struct book*)malloc(sizeof(struct book));
     node->numCopies = 1;
@@ -151,13 +152,13 @@ int bookCompareLast(struct book *book1, struct book *book2){
 
 // Delete Function - Accepts two struct book pointer arguments, the header of the list and the node
 // to be removed from the list. 
-void delete(struct book* header, struct book* target){
+struct book* delete(struct book* header, struct book* target){
     struct book* current = header;
     // Special case for deleting the first node in the list.
     if(target == header){
         header = header->next;
         free(target);
-        return;
+        return header;
     }
     // Checking if current->next exists.  We are looking for a pointer to target.
     while(current->next != target && current->next){
@@ -167,6 +168,8 @@ void delete(struct book* header, struct book* target){
     if(current->next == target){
         current->next = target->next;
         free(target);
-        return;
+        return header;
     }
+    // ERROR: Target not found.
+    return 0;
 }

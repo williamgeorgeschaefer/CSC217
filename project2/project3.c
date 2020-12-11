@@ -189,8 +189,9 @@ int main(int argc, char *argv[]) {
             target->numCopies -= purchaseCopies;
         }
         if(target->numCopies == 0){
-            if(target == header){
-                
+            // We have encountered a COCKROACH!!!
+            if(delete(booksHeader, target) == 0){
+                printf("%s\n", "WARNING: You may be attempting to delete a book that is not in the list.");
             }
         }
         printf("%s%s%s%s%d%s\n", target->title, " (", target->last, "): ", target->numCopies, " copies");
