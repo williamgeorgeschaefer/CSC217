@@ -21,6 +21,7 @@
 
 char calcCheck(struct book *myBook);
 void getisbn(char line[], char isbn[]);
+int populateCommand(char line[], char isbn[]);
 
 // I learned how to use command line parameters from the following website:
 // http://farside.ph.utexas.edu/teaching/329/lectures/node23.html
@@ -160,28 +161,37 @@ int main(int argc, char *argv[]) {
 
     while(1){
         //Interactive input for the user
+        printf("%s\n", "Please enter a command:");
         findLine(line, 1000);
-        //Character array for the ISBN of the book being searched
         char isbn[11];
-        //Target book
         struct book* target;
-        //Number of copies being purchased
-        int purchaseCopies = purchase(line, isbn);
-        //Terminate program if the following condition is true
+        int purchaseCopies = populateCommand(line, isbn);
+        if(purchaseCopies == -1){
+            printf("%s\n", "Invalid input.  Proper use is <ISBN> [<numCopies>].");
+            continue;
+        }
+        //Terminate program if the user enters "q" or "quit"
         if(strcmp(line, "quit\n") == 0 || strcmp(line, "q\n") == 0){
             printf("%s\n", "Process terminating...");
             break;
         }
-        getisbn(line, isbn);
         target = bookSearch(booksHeader, isbn);
         if(target == 0){
-            printf("%s\n", "The book you requested is not in the inventory.  Process continuing...");
+            printf("%s\n", "The book you requested is not in the inventory.");
             continue;
         }
-        else if(line[10] == '\n'){
-            printf("%s%s%s%s%d%s\n", target->title, " (", target->last, "): ", target->numCopies, " copies");
+
+        if(purchaseCopies != 0){
+            if(purchaseCopies > target->numCopies){
+                printf("%s\n", "Transaction failed.  Not enough copies.");
+                continue;
+            }
+            target->numCopies -= purchaseCopies;
         }
-        printf("%d\n", purchaseCopies);
+        if(target->numCopies == 0){
+            // Remove item from linked list.
+        }
+        printf("%s%s%s%s%d%s\n", target->title, " (", target->last, "): ", target->numCopies, " copies");
     }
 
     //Output
@@ -228,7 +238,15 @@ char calcCheck(struct book *myBook) {
     return d;
 }
 
-void getisbn(char line[], char isbn[]){
+// Populate Command Function - Accepts two character array arguments, containing the line 
+// read in and the ISBN corresponding to the clerk's input.  
+// Returns -1 if an error occurs.
+// Returns 0 if ISBN is found but a number of copies is not found.
+// ISBN character array is populated with the ISBN it read in from the user.
+int populateCommand(char line[], char isbn[]){
+    if(isBlank(line)){
+        return -1;
+    }
     int index = 0; //the index currently being processed
     int digits = 0; //number of digits in the ISBN of the book being read in.
     while(digits < 10 && line[index] != '\0') {
@@ -238,27 +256,19 @@ void getisbn(char line[], char isbn[]){
         }
         index++;
     }
-}
-
-int purchase(char line[], char isbn[]){
-    int index = 0; //the index currently being processed
-    int digits = 0; //number of digits in the ISBN of the book being read in.
-    while(digits < 10 && line[index] != '\0') {
-        if(line[index] != ' ' && line[index] != '-' && line[index] != '\n'){
-            isbn[index] = line[index];
-            digits++;
-        }
-        index++;
-    }
-
     while(isspace(line[index])){
         index++;
     }
-
-    if(isdigit(line[index] == 0)){
+    if(line[index] == '\0'){
+        return 0;
+    }
+    int numCopies = 0;
+    while(isdigit(line[index])){
+        numCopies = (10 * numCopies) + (line[index] - '0');
+        index++;
+    }
+    if(!isspace(line[index]) && line[index] != '\0'){
         return -1;
     }
-    else{
-        return line[index] - '0';
-    }
+    return numCopies;
 }
