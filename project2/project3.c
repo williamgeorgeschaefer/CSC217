@@ -19,7 +19,7 @@
 #include "createbook.h"
 #include "textbook.h"
 
-char calcCheck(struct book *myBook);
+char calcCheck(char isbn[]);
 void getisbn(char line[], char isbn[]);
 int populateCommand(char line[], char isbn[]);
 
@@ -115,6 +115,7 @@ int main(int argc, char *argv[]) {
     struct invalidLine *invalidLinesHeader = 0; //the header of the list of invalid lines
 
     int i = getLineFromFile(input, line, 1000); //integer returned after reading in a line of input
+
     while(line[0] != '\0'){
         if(isBlank(line)){
             numLines++;
@@ -125,7 +126,7 @@ int main(int argc, char *argv[]) {
         //or failure of creating a book
         if(success == 1){
             struct book *target = bookSearch(booksHeader, myBook.isbn);
-            char myBookCheck = calcCheck(&myBook);
+            char myBookCheck = calcCheck(myBook.isbn);
             //Increment number of copies if book is found and the processed book has matching input
             if((target != 0) && (bookCompareTitle(target, &myBook) == 0)){
                 target->numCopies++;
@@ -159,17 +160,25 @@ int main(int argc, char *argv[]) {
         i = getLineFromFile(input, line, 1000);
     }
 
+    //Output
+    printf("%d%s\n", numLines, " lines of input were processed.\n");
+    printList(booksHeader);
+    printf("\n%d%s\n", accept, " lines were accepted.");
+    printf("%d%s\n", reject, " lines were rejected.");
+    if(invalidLinesActive == 1){
+        printf("\n%s\n", "The following lines were rejected:\n");
+        printInvalidList(invalidLinesHeader);
+        printf("\n");
+    }
+
+    // Start processing interactive commands...
     while(1){
         //Interactive input for the user
         printf("%s\n", "Please enter a command:");
         findLine(line, 1000);
         char isbn[11];
         struct book* target;
-        int purchaseCopies = populateCommand(line, isbn);
-        if(purchaseCopies == -1){
-            printf("%s\n", "Invalid input.  Proper use is <ISBN> [<numCopies>].");
-            continue;
-        }
+        
         //Terminate program if the user enters "q" or "quit"
         if(strcmp(line, "quit\n") == 0 || strcmp(line, "q\n") == 0){
             printf("%s\n", "Process terminating...");
@@ -180,21 +189,35 @@ int main(int argc, char *argv[]) {
             writeInventory(booksHeader, stdout);
             continue;
         }
+        
+        //We are supposed to have a valid ISBN.  We are now testing to see if there is
+        //invalid input afterwards.
+        int purchaseCopies = populateCommand(line, isbn);
+        if(purchaseCopies == -1 || calcCheck(isbn) == '\0'){
+            printf("%s\n", "Invalid input.  Proper use is <ISBN> [<numCopies>].");
+            continue;
+        }
+        
         target = bookSearch(booksHeader, isbn);
         if(target == 0){
             printf("%s\n", "The book you requested is not in the inventory.");
             continue;
         }
-
-        if(purchaseCopies != 0){
+        if(purchaseCopies == 0){
+            printf("%s%s%s%s%d%s\n", target->title, " (", target->last, "): ", target->numCopies, " copies");
+            continue;
+        }
+        else{
             if(purchaseCopies > target->numCopies){
-                printf("%s\n", "Transaction failed.  Not enough copies.");
+                printf("%s\n", "Transaction failed.  Not enough copies in inventory.");
                 continue;
             }
             target->numCopies -= purchaseCopies;
+            printf("%s\n", "Transaction successful!");
         }
         if(target->numCopies == 0){
             booksHeader = delete(booksHeader, target);
+            printf("%s\n", "Transaction successful!");
         }
     }
 
@@ -214,20 +237,23 @@ int main(int argc, char *argv[]) {
 }
 
 // Function to calculate the check digit
-char calcCheck(struct book *myBook) {
-    if(myBook == 0){
+char calcCheck(char isbn[]) {
+    if(strlen(isbn) == 0){
         return '\0';
     }
     int s = 0;
     int result = 0;
     char d = '\0';
     // Not enough digits in ISBN
-    if(strlen(myBook->isbn) < 9){
+    if(strlen(isbn) < 9){
         return '\0';
     }
     // Calculate check digit
     for(int i = 0; i < 9; i++) {
-        s += (((int) myBook->isbn[i]) - '0') * (10 - i);
+        if(!isdigit(isbn[i])){
+            return '\0';
+        }
+        s += (((int) isbn[i]) - '0') * (10 - i);
     }
     // I called the modular operator twice because if
     // s % 11 == 0, result would be equal to 11 and you
