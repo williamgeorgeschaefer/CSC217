@@ -178,46 +178,55 @@ int main(int argc, char *argv[]) {
         findLine(line, 1000);
         char isbn[11];
         struct book* target;
+        struct book* matches[100];
+        int numMatches = 0;
         
         //Terminate program if the user enters "q" or "quit"
         if(strcmp(line, "quit\n") == 0 || strcmp(line, "q\n") == 0){
             printf("%s\n", "Process terminating...");
             break;
         }
-        // Additional command to print the current condition of the inventory.
-        if(strcmp(line, "i\n") == 0){
-            writeInventory(booksHeader, stdout);
-            continue;
-        }
+
+        // if(strcmp(line, "i\n") == 0){
+        //     writeInventory(booksHeader, stdout);
+        //     continue;
+        // }
+        //
+        // I temporarily added this invocation to print the current condition of the linked list.
+        // I added it for the purpose of debugging the program.
         
         //We are supposed to have a valid ISBN.  We are now testing to see if there is
         //invalid input afterwards.
         int purchaseCopies = populateCommand(line, isbn);
-        if(purchaseCopies == -1 || calcCheck(isbn) == '\0'){
+        if(purchaseCopies == -1){
             printf("%s\n", "Invalid input.  Proper use is <ISBN> [<numCopies>].");
             continue;
         }
         
-        target = bookSearch(booksHeader, isbn);
-        if(target == 0){
+        numMatches = partialSearch(booksHeader, isbn, matches, 100);
+        if(numMatches == 0){
             printf("%s\n", "The book you requested is not in the inventory.");
             continue;
         }
-        if(purchaseCopies == 0){
-            printf("%s%s%s%s%d%s\n", target->title, " (", target->last, "): ", target->numCopies, " copies");
+        if(purchaseCopies == 0 || numMatches > 1){
+            if(numMatches > 1){
+                printf("%s\n", "Which of these books did you mean?");
+            }
+            for(int i = 0; i < numMatches && matches[i] != 0; i++){
+                printf("%s%s%s%s%s%s%d%s\n", matches[i]->isbn, " ", matches[i]->title, " (", matches[i]->last, "): ", matches[i]->numCopies, " copies");
+            }
             continue;
         }
-        else{
-            if(purchaseCopies > target->numCopies){
+        else if(numMatches == 1){
+            if(purchaseCopies > matches[0]->numCopies){
                 printf("%s\n", "Transaction failed.  Not enough copies in inventory.");
                 continue;
             }
-            target->numCopies -= purchaseCopies;
-            printf("%s\n", "Transaction successful!");
-        }
-        if(target->numCopies == 0){
-            booksHeader = delete(booksHeader, target);
-            printf("%s\n", "Transaction successful!");
+            matches[0]->numCopies -= purchaseCopies;
+            printf("%s%s\n", matches[0]->isbn, " Transaction successful!");
+            if(matches[0]->numCopies == 0){
+                booksHeader = delete(booksHeader, matches[0]);
+            }
         }
     }
 
@@ -279,13 +288,14 @@ int populateCommand(char line[], char isbn[]){
     }
     int index = 0; //the index currently being processed
     int digits = 0; //number of digits in the ISBN of the book being read in.
-    while(digits < 10 && line[index] != '\0') {
-        if(line[index] != ' ' && line[index] != '-' && line[index] != '\n'){
+    while(digits < 10 && !isspace(line[index]) && line[index] != '\0') {
+        if(line[index] != '-' && line[index] != '\n'){
             isbn[index] = line[index];
             digits++;
         }
         index++;
     }
+    isbn[index] = '\0';
     while(isspace(line[index])){
         index++;
     }

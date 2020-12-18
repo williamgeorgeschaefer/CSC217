@@ -114,6 +114,31 @@ struct book* bookSearch(struct book *header, char targetisbn[]){
     return 0;
 }
 
+// Partial Search function - Accepts four arguments,  a struct book
+// representing the head of the linked list of books, a character array 
+// representing the partial ISBN of the book that is being searched, a
+// struct book array to store each book with a matching prefix and an integer
+// representing the number of matches the array has room for.  This function
+// returns an integer representing the number of prefix matches in the inventory.
+// The array of matches ends with a null terminator.
+int partialSearch(struct book *header, char targetisbn[], struct book* matches[], int lim){
+    struct book *current = header;
+    int i = 0;
+    int stdmatches = 0;
+    while(current != 0){
+        if(strncmp(current->isbn, targetisbn, strlen(targetisbn)) == 0){
+            if(i < lim - 1){
+                matches[i] = current;
+                i++;
+            }
+            stdmatches++;
+        }
+        current = current->next;
+    }
+    matches[i] = 0;
+    return stdmatches;
+}
+
 // Book Compare Title function - Accepts two struct book arguments
 // and compares the title, last name and first name.  This function
 // is not called until after we know that both books have the same ISBN.

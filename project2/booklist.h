@@ -10,6 +10,7 @@ struct book{
 struct book* add(struct book *header, struct book *newBook, int authorSortActive);
 void printList(struct book* header);
 struct book* bookSearch(struct book *header, char targetisbn[]);
+int partialSearch(struct book *header, char targetisbn[], struct book* matches[], int lim);
 int bookCompareTitle(struct book *book1, struct book *book2);
 int bookCompareLast(struct book *book1, struct book *book2);
 void writeInventory(struct book* header, FILE *output);
