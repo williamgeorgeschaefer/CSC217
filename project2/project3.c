@@ -1,6 +1,6 @@
 // William Schaefer (N00857559@students.ncc.edu)
 // CSC 217
-// Project 2: "Bookstore Part 1"
+// Project 3: "Bookstore Part 1"
 // Due November 25, 2020 at 11:59 pm
 // project2.c 
 //
@@ -9,6 +9,10 @@
 // containing information on a particular book, and stores them
 // in a linked list.  It also accepts and rejects lines based on
 // the validity of what is passed in.
+//
+// It then has an interactive portion where the user is the clerk
+// of the bookstore.  The user can check to see if an ISBN is in
+// the inventory, and the user can also sell copies.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,48 +51,55 @@ int main(int argc, char *argv[]) {
             invalidLinesActive = 1;
             authorSortActive = 1;
         }
+        // Command to change the input file.
         else if(strcmp(argv[i], "-i") == 0){
             if(argc > i + 1){
                 strcpy(inFileName, argv[i + 1]);
                 i++;
             }
+            // ERROR: User enters -i not followed by a file name.
             else{
                 fprintf(stderr, "%s%s%s\n", "Usage: ", argv[0], " [-i inFileName] [-o outFileName]");
                 fprintf(stderr, "%s%s%s\n", "OR: ", argv[0], " [-o outFileName] [-i inFileName]");
                 return 1;
             }
         }
+        // Command to change the output file.
         else if(strcmp(argv[i], "-o") == 0){
             if(argc > i + 1){
                 strcpy(outFileName, argv[i + 1]);
                 i++;
             }
+            // ERROR: User enters -o not followed by a file name.
             else{
                 fprintf(stderr, "%s%s%s\n", "Usage: ", argv[0], " [-i inFileName] [-o outFileName]");
                 fprintf(stderr, "%s%s%s\n", "OR: ", argv[0], " [-o outFileName] [-i inFileName]");
                 return 4;
             }
         }
+        // ERROR: User enters invalid input.
         else{
             fprintf(stderr, "%s%s%s\n", "Usage: ", argv[0], " [-i inFileName] [-o outFileName]");
             fprintf(stderr, "%s%s%s\n", "OR: ", argv[0], " [-o outFileName] [-i inFileName]");
             return 3;
         }
     }
-
+    //Open Input File
     if(strlen(inFileName) > 0){
         input = fopen(inFileName, "r");
     }
-
+    //Open Output File
     if(strlen(outFileName) > 0){
         output = fopen(outFileName, "w");
     }
 
+    //ERROR: Input file does not exist.
     if(input == 0){
         fprintf(stderr, "%s%s%s%s\n", argv[0], ": Input file ", inFileName, " not found");
         return 2;
     }
 
+    //ERROR: Input file fails to open.
     if(output == 0){
         fprintf(stderr, "%s%s%s%s\n", argv[0], ": Output file ", outFileName, " failed to open");
         return 5;
@@ -174,7 +185,7 @@ int main(int argc, char *argv[]) {
     // Start processing interactive commands...
     while(1){
         //Interactive input for the user
-        printf("%s\n", "Please enter a command:");
+        printf("%s", "\nPlease enter a command: ");
         findLine(line, 1000);
         char isbn[11];
         struct book* target;
@@ -228,17 +239,6 @@ int main(int argc, char *argv[]) {
                 booksHeader = delete(booksHeader, matches[0]);
             }
         }
-    }
-
-    //Output
-    printf("%d%s\n", numLines, " lines of input were processed.\n");
-    printList(booksHeader);
-    printf("\n%d%s\n", accept, " lines were accepted.");
-    printf("%d%s\n", reject, " lines were rejected.");
-    if(invalidLinesActive == 1){
-        printf("\n%s\n", "The following lines were rejected:\n");
-        printInvalidList(invalidLinesHeader);
-        printf("\n");
     }
 
     writeInventory(booksHeader, output);
