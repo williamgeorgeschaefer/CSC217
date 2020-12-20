@@ -290,6 +290,17 @@ int populateCommand(char line[], char isbn[]){
     int digits = 0; //number of digits in the ISBN of the book being read in.
     while(digits < 10 && !isspace(line[index]) && line[index] != '\0') {
         if(line[index] != '-' && line[index] != '\n'){
+            // The index being processed is not a digit.  Return -1.
+            if(!isdigit(line[index])){
+                return -1;
+            }
+            // The index being processed is the check digit.
+            // Return -1 if the check digit is incorrect.
+            if(index == 9){
+                if(line[index] != calcCheck(isbn)){
+                    return -1;
+                }
+            }
             isbn[index] = line[index];
             digits++;
         }
@@ -307,7 +318,7 @@ int populateCommand(char line[], char isbn[]){
         numCopies = (10 * numCopies) + (line[index] - '0');
         index++;
     }
-    if(!isspace(line[index]) && line[index] != '\0'){
+    if(!isdigit(line[index]) && !isspace(line[index]) && line[index] != '\0'){
         return -1;
     }
     return numCopies;
