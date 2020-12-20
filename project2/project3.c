@@ -290,8 +290,8 @@ int populateCommand(char line[], char isbn[]){
     int digits = 0; //number of digits in the ISBN of the book being read in.
     while(digits < 10 && !isspace(line[index]) && line[index] != '\0') {
         if(line[index] != '-' && line[index] != '\n'){
-            // The index being processed is not a digit.  Return -1.
-            if(!isdigit(line[index])){
+            // The index being processed is not a digit, and it is not the check digit.  Return -1.
+            if(index < 9 && !isdigit(line[index])){
                 return -1;
             }
             // The index being processed is the check digit.
@@ -301,23 +301,30 @@ int populateCommand(char line[], char isbn[]){
                     return -1;
                 }
             }
-            isbn[index] = line[index];
+            isbn[digits] = line[index];
             digits++;
         }
         index++;
     }
+    // SET THE LAST INDEX OF ISBN EQUAL TO THE NULL TERMINATOR!!!
     isbn[index] = '\0';
     while(isspace(line[index])){
         index++;
     }
+    // We have reached the end of the line, after having only read in the ISBN.
+    // The clerk is not checking out any copies.  Return 0.
     if(line[index] == '\0'){
         return 0;
     }
     int numCopies = 0;
+    // We are tracking the digits after the whitespace entered by the clerk.
+    // This represents the number of the copies.
     while(isdigit(line[index])){
         numCopies = (10 * numCopies) + (line[index] - '0');
         index++;
     }
+    // The character(s) that is/are supposed to represent the number of copies
+    // contain(s) a character that is not a digit.  Return -1.
     if(!isdigit(line[index]) && !isspace(line[index]) && line[index] != '\0'){
         return -1;
     }
