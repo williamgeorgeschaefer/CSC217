@@ -291,12 +291,12 @@ int populateCommand(char line[], char isbn[]){
     while(digits < 10 && !isspace(line[index]) && line[index] != '\0') {
         if(line[index] != '-' && line[index] != '\n'){
             // The index being processed is not a digit, and it is not the check digit.  Return -1.
-            if(index < 9 && !isdigit(line[index])){
+            if(digits < 9 && !isdigit(line[index])){
                 return -1;
             }
             // The index being processed is the check digit.
             // Return -1 if the check digit is incorrect.
-            if(index == 9){
+            if(digits == 9){
                 if(line[index] != calcCheck(isbn)){
                     return -1;
                 }
