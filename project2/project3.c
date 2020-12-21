@@ -1,8 +1,8 @@
 // William Schaefer (N00857559@students.ncc.edu)
 // CSC 217
-// Project 3: "Bookstore Part 1"
-// Due November 25, 2020 at 11:59 pm
-// project2.c 
+// Project 3: "Bookstore Part 2"
+// Due December 21, 2020 at 11:59 am
+// project3.c 
 //
 // This code reads in lines from standard input representing
 // books being shipped to the bookstore.  It creates structures
